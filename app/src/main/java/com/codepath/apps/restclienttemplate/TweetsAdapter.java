@@ -2,7 +2,6 @@ package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +10,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.codepath.apps.restclienttemplate.models.TimelineActivity;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
 import org.parceler.Parcels;
@@ -78,22 +76,35 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         ImageView ivProfileImage;
         TextView tvBody;
         TextView tvScreenName;
+        TextView tvName;
         TextView tvTime;
         RelativeLayout container;
+        TextView tvHeart;
+        TextView tvReply;
+        ImageView ivImage;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ivProfileImage = itemView.findViewById(R.id.ivProfileImage);
             tvBody = itemView.findViewById(R.id.tvBody);
             tvScreenName = itemView.findViewById(R.id.tvSreenName);
+            tvName = itemView.findViewById(R.id.tvName);
             tvTime = itemView.findViewById(R.id.tvTime);
             container = itemView.findViewById(R.id.container);
+            tvHeart = itemView.findViewById(R.id.tvHeart);
+            tvReply = itemView.findViewById(R.id.tvReply);
+            ivImage = itemView.findViewById(R.id.ivImage);
+
 
         }
 
         public void bind(Tweet tweet) {
             tvBody.setText(tweet.body);
-            tvScreenName.setText(tweet.user.sreenName);
+            tvScreenName.setText("@" + tweet.user.sreenName);
+            tvName.setText( tweet.user.name);
+            tvReply.setText(tweet.Retweets);
+            tvHeart.setText(tweet.Favorites);
 
             container.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -105,8 +116,13 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                 }
             });
 
+            Glide.with(context).load(tweet.user.profileImageUrl).transform(new CircleCrop()).into(ivProfileImage);
 
-            Glide.with(context).load(tweet.user.profileImageUrl).into(ivProfileImage);
+
+            if (!tweet.entities.Image.isEmpty()) {
+                ivImage.setVisibility(View.VISIBLE);
+            Glide.with(context).load(tweet.entities.Image).into(ivImage);
+            }
 
         }
     }
