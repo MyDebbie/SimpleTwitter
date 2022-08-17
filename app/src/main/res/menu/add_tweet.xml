@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".models.TimelineActivity">
+
+
+
+    <item android:id="@+id/action_add_tweet"
+        android:orderInCategory="5"
+        android:title="Add_tweet"
+        android:icon="@drawable/add_tweet"
+        app:showAsAction="always|collapseActionView"/>
+
+</menu>

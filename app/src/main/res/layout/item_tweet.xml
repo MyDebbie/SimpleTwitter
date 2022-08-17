@@ -64,16 +64,15 @@
 
     <ImageView
         android:id="@+id/ivImage"
-        android:layout_width="wrap_content"
-        android:layout_height="200dp"
+        android:layout_width="450dp"
+        android:layout_height="300dp"
         android:layout_below="@id/tvBody"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="5dp"
         android:visibility="gone"
         android:layout_toEndOf="@id/ivProfileImage"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
-
 
     <TextView
         android:id="@+id/tvTime"
@@ -93,16 +92,6 @@
         android:layout_toEndOf="@id/ivProfileImage"
         android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tvComment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:drawablePadding="10dp"
-            android:orientation="horizontal"
-            app:drawableLeftCompat="@drawable/comment"
-            tools:text="42" />
 
         <TextView
             android:id="@+id/tvReply"
@@ -147,5 +136,6 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:background="?android:attr/listDivider" />
+
 
 </RelativeLayout>

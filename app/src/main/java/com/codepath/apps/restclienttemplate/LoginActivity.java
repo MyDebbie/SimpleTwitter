@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
+import androidx.appcompat.widget.Toolbar;
+
 import com.codepath.apps.restclienttemplate.models.SampleModel;
 import com.codepath.apps.restclienttemplate.models.SampleModelDao;
 import com.codepath.apps.restclienttemplate.models.TimelineActivity;
@@ -25,6 +27,10 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 		sampleModel.setName("CodePath");
 
 		sampleModelDao = ((TwitterApp) getApplicationContext()).getMyDatabase().sampleModelDao();
+
+		Toolbar toolbar =  findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+		getSupportActionBar().setTitle("Twitter");
 
 		AsyncTask.execute(new Runnable() {
 			@Override

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
 import org.parceler.Parcels;
@@ -23,6 +24,8 @@ public class TweetDetailActivity extends AppCompatActivity {
     TextView tvTime;
     TextView tvFavorites;
     TextView tvRetweets;
+    TextView tvHeart;
+    TextView tvReply;
     ImageView ivImage;
 
 
@@ -39,6 +42,8 @@ public class TweetDetailActivity extends AppCompatActivity {
         tvTime = findViewById(R.id.tvTime);
         tvFavorites = findViewById(R.id.tvFavorites);
         tvRetweets = findViewById(R.id.tvRetweets);
+        tvHeart = findViewById(R.id.tvHeart);
+        tvReply = findViewById(R.id.tvReply);
         ivImage = findViewById(R.id.ivImage);
 
         Toolbar toolbar =  findViewById(R.id.toolbar);
@@ -55,11 +60,13 @@ public class TweetDetailActivity extends AppCompatActivity {
         tvTime.setText(tweet.getFormatedTimeStamp1());
         tvFavorites.setText(tweet.Favorites + " FAVORITES");
         tvRetweets.setText(tweet.Retweets + " RETWEETS");
+        tvReply.setText(tweet.Retweets);
+        tvHeart.setText(tweet.Favorites);
         Glide.with(this).load(tweet.user.profileImageUrl).transform(new CircleCrop()).into(ivProfileImage);
 
         if (!tweet.entities.Image.isEmpty()) {
             ivImage.setVisibility(View.VISIBLE);
-            Glide.with(this).load(tweet.entities.Image).into(ivImage);
+            Glide.with(this).load(tweet.entities.Image).transform(new RoundedCorners(60)).into(ivImage);
         }
 
     }

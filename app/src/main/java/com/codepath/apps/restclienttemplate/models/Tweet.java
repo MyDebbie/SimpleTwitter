@@ -15,6 +15,7 @@ import java.util.List;
 
 public class Tweet {
 
+
     public String body;
     public String createdAt;
     public long id;

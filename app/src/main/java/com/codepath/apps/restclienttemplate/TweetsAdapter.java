@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
 import org.parceler.Parcels;
@@ -106,6 +107,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvReply.setText(tweet.Retweets);
             tvHeart.setText(tweet.Favorites);
 
+
             container.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -121,7 +123,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
             if (!tweet.entities.Image.isEmpty()) {
                 ivImage.setVisibility(View.VISIBLE);
-            Glide.with(context).load(tweet.entities.Image).into(ivImage);
+            Glide.with(context).load(tweet.entities.Image).transform(new RoundedCorners(60)).into(ivImage);
             }
 
         }
