@@ -20,9 +20,12 @@ public class Tweet {
     public String createdAt;
     public long id;
     public User user;
+    public Extended_entities extended_entities;
     public Entities entities;
     public String Favorites;
     public String Retweets;
+    public boolean favorited;
+    public boolean retweeted;
 
 
     public Tweet() {}
@@ -35,7 +38,18 @@ public class Tweet {
         tweet.Favorites = jsonObject.getString("favorite_count");
         tweet.Retweets = jsonObject.getString("retweet_count");
         tweet.user = User.fromJson(jsonObject.getJSONObject("user"));
+        tweet.favorited = jsonObject.getBoolean("favorited");
+        tweet.retweeted = jsonObject.getBoolean("retweeted");
         tweet.entities = Entities.fromJson(jsonObject.getJSONObject("entities"));
+
+
+        if (jsonObject.has("extended_entities")){
+            tweet.extended_entities = Extended_entities.fromJson(jsonObject.getJSONObject("extended_entities"));
+        }
+        else if(jsonObject.has("extended_entities")){
+            tweet.extended_entities.Video = "";
+        }
+
         return tweet;
 
     }

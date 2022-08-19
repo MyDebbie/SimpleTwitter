@@ -74,6 +74,9 @@
         android:layout_toEndOf="@id/ivProfileImage"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
+
+
+
     <TextView
         android:id="@+id/tvTime"
         android:layout_width="wrap_content"
@@ -114,6 +117,7 @@
             android:orientation="horizontal"
             app:drawableLeftCompat="@drawable/heart"
             tools:text="42" />
+
 
         <TextView
             android:id="@+id/tvShare"

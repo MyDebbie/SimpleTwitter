@@ -2,6 +2,7 @@ package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -85,6 +87,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         ImageView ivImage;
 
 
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ivProfileImage = itemView.findViewById(R.id.ivProfileImage);
@@ -107,7 +110,6 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvReply.setText(tweet.Retweets);
             tvHeart.setText(tweet.Favorites);
 
-
             container.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -117,6 +119,35 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
                 }
             });
+
+            tvHeart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int favories = Integer.parseInt(tweet.Favorites);
+                    if(!tweet.favorited){
+                        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.fill_heart);
+                        drawable.setBounds(0,0, drawable.getMinimumHeight(), drawable.getMinimumWidth());
+                        tvHeart.setCompoundDrawables(drawable, null, null, null);
+
+
+                        tvHeart.setText(String.valueOf(++favories));
+                        tweet.favorited = true;
+                    }
+                    else
+                    {
+                        ++favories;
+
+                        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.heart);
+                        drawable.setBounds(0,0, drawable.getMinimumHeight(), drawable.getMinimumWidth());
+                        tvHeart.setCompoundDrawables(drawable, null, null, null);
+
+                        --favories;
+                        tvHeart.setText(String.valueOf(favories));
+                        tweet.favorited = false;
+                    }
+                }
+            });
+
 
             Glide.with(context).load(tweet.user.profileImageUrl).transform(new CircleCrop()).into(ivProfileImage);
 
