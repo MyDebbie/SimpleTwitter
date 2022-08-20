@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,7 +33,7 @@ public class TweetDetailActivity extends AppCompatActivity {
     TextView tvHeart;
     TextView tvRetweet;
     ImageView ivImage;
-    TextView edReply;
+    EditText edReply;
 
 
     @Override
@@ -74,7 +75,7 @@ public class TweetDetailActivity extends AppCompatActivity {
         tvTime.setText(tweet.getFormatedTimeStamp1());
         tvFavorites.setText(tweet.getFavorites() + " FAVORITES");
         tvRetweets.setText(tweet.getRetweets() + " RETWEETS");
-        edReply.setHint("Reply To " + tweet.user.name);
+        edReply.setHint("Reply to " + tweet.user.name);
 
         if(tweet.favorited) {
             Drawable drawable = ContextCompat.getDrawable(TweetDetailActivity.this, R.drawable.fill_heart);
