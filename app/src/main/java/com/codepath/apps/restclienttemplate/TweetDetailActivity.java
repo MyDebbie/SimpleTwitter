@@ -4,11 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -32,8 +30,9 @@ public class TweetDetailActivity extends AppCompatActivity {
     TextView tvFavorites;
     TextView tvRetweets;
     TextView tvHeart;
-    TextView tvReply;
+    TextView tvRetweet;
     ImageView ivImage;
+    TextView edReply;
 
 
     @Override
@@ -51,8 +50,9 @@ public class TweetDetailActivity extends AppCompatActivity {
         tvFavorites = findViewById(R.id.tvFavorites);
         tvRetweets = findViewById(R.id.tvRetweets);
         tvHeart = findViewById(R.id.tvHeart);
-        tvReply = findViewById(R.id.tvReply);
+        tvRetweet = findViewById(R.id.tvRetweet);
         ivImage = findViewById(R.id.ivImage);
+        edReply = findViewById(R.id.edReply);
 
 
         Toolbar toolbar =  findViewById(R.id.toolbar);
@@ -72,39 +72,78 @@ public class TweetDetailActivity extends AppCompatActivity {
         tvName.setText(tweet.user.name);
         tvScreenName.setText("@" + tweet.user.sreenName);
         tvTime.setText(tweet.getFormatedTimeStamp1());
-        tvFavorites.setText(tweet.Favorites + " FAVORITES");
-        tvRetweets.setText(tweet.Retweets + " RETWEETS");
-        tvReply.setText(tweet.Retweets);
-        tvHeart.setText(tweet.Favorites);
+        tvFavorites.setText(tweet.getFavorites() + " FAVORITES");
+        tvRetweets.setText(tweet.getRetweets() + " RETWEETS");
+        edReply.setHint("Reply To " + tweet.user.name);
+
+        if(tweet.favorited) {
+            Drawable drawable = ContextCompat.getDrawable(TweetDetailActivity.this, R.drawable.fill_heart);
+            drawable.setBounds(0, 0, drawable.getMinimumHeight(), drawable.getMinimumWidth());
+            tvHeart.setCompoundDrawables(drawable, null, null, null);
+        }
+
+        if(tweet.retweeted){
+            Drawable drawable = ContextCompat.getDrawable(TweetDetailActivity.this, R.drawable.green_retweet);
+            drawable.setBounds(0,0, drawable.getMinimumHeight(), drawable.getMinimumWidth());
+            tvRetweet.setCompoundDrawables(drawable, null, null, null);
+        }
 
 
-        tvHeart.setOnClickListener(new View.OnClickListener() {
+            tvHeart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int favories = Integer.parseInt(tweet.Favorites);
                 if(!tweet.favorited){
                     Drawable drawable = ContextCompat.getDrawable(TweetDetailActivity.this, R.drawable.fill_heart);
                     drawable.setBounds(0,0, drawable.getMinimumHeight(), drawable.getMinimumWidth());
                     tvHeart.setCompoundDrawables(drawable, null, null, null);
 
 
-                    tvHeart.setText(String.valueOf(++favories));
+                    tvHeart.setText(String.valueOf(++tweet.Favorites));
                     tweet.favorited = true;
                 }
                 else
                 {
-                    ++favories;
+                    ++tweet.Favorites;
 
                     Drawable drawable = ContextCompat.getDrawable(TweetDetailActivity.this, R.drawable.heart);
                     drawable.setBounds(0,0, drawable.getMinimumHeight(), drawable.getMinimumWidth());
                     tvHeart.setCompoundDrawables(drawable, null, null, null);
 
-                    --favories;
-                    tvHeart.setText(String.valueOf(favories));
+                    --tweet.Favorites;
+                    tvHeart.setText(String.valueOf(tweet.Favorites));
                     tweet.favorited = false;
                 }
             }
         });
+
+
+        tvRetweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!tweet.retweeted){
+                    Drawable drawable = ContextCompat.getDrawable(TweetDetailActivity.this, R.drawable.green_retweet);
+                    drawable.setBounds(0,0, drawable.getMinimumHeight(), drawable.getMinimumWidth());
+                    tvRetweet.setCompoundDrawables(drawable, null, null, null);
+
+
+                    tvRetweet.setText(String.valueOf(++tweet.Retweets));
+                    tweet.retweeted = true;
+                }
+                else
+                {
+                    ++tweet.Retweets;
+
+                    Drawable drawable = ContextCompat.getDrawable(TweetDetailActivity.this, R.drawable.retweet);
+                    drawable.setBounds(0,0, drawable.getMinimumHeight(), drawable.getMinimumWidth());
+                    tvRetweet.setCompoundDrawables(drawable, null, null, null);
+
+                    --tweet.Retweets;
+                    tvRetweet.setText(String.valueOf(tweet.Retweets));
+                    tweet.retweeted = false;
+                }
+            }
+        });
+
 
         Glide.with(this).load(tweet.user.profileImageUrl).transform(new CircleCrop()).into(ivProfileImage);
 
@@ -115,11 +154,12 @@ public class TweetDetailActivity extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected( MenuItem item ) {
-        int homeAsUp = R.id.homeAsUp;
                 Intent intent = new Intent(TweetDetailActivity.this, TimelineActivity.class);
-                startActivity(intent);
+                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivityIfNeeded(intent, 0);
                 return true;
         }
- }
+
+}
 
 

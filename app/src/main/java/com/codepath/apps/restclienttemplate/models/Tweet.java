@@ -22,8 +22,8 @@ public class Tweet {
     public User user;
     public Extended_entities extended_entities;
     public Entities entities;
-    public String Favorites;
-    public String Retweets;
+    public int Favorites;
+    public int Retweets;
     public boolean favorited;
     public boolean retweeted;
 
@@ -35,8 +35,8 @@ public class Tweet {
         tweet.body = jsonObject.getString("text");
         tweet.createdAt = jsonObject. getString("created_at");
         tweet.id = jsonObject.getLong("id");
-        tweet.Favorites = jsonObject.getString("favorite_count");
-        tweet.Retweets = jsonObject.getString("retweet_count");
+        tweet.Favorites = jsonObject.getInt("favorite_count");
+        tweet.Retweets = jsonObject.getInt("retweet_count");
         tweet.user = User.fromJson(jsonObject.getJSONObject("user"));
         tweet.favorited = jsonObject.getBoolean("favorited");
         tweet.retweeted = jsonObject.getBoolean("retweeted");
@@ -62,6 +62,13 @@ public class Tweet {
         return TimeFormatter.getTimeStamp(createdAt);
     }
 
+    public String getFavorites() {
+        return String.valueOf(Favorites);
+    }
+
+    public String getRetweets() {
+        return String.valueOf(Retweets);
+    }
 
     public static List<Tweet> fromJsonArray(JSONArray jsonArray) throws JSONException {
         List<Tweet> tweets = new ArrayList<>();

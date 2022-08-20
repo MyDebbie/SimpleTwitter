@@ -83,7 +83,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         TextView tvTime;
         RelativeLayout container;
         TextView tvHeart;
-        TextView tvReply;
+        TextView tvRetweet;
         ImageView ivImage;
 
 
@@ -97,7 +97,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvTime = itemView.findViewById(R.id.tvTime);
             container = itemView.findViewById(R.id.container);
             tvHeart = itemView.findViewById(R.id.tvHeart);
-            tvReply = itemView.findViewById(R.id.tvReply);
+            tvRetweet = itemView.findViewById(R.id.tvRetweet);
             ivImage = itemView.findViewById(R.id.ivImage);
 
 
@@ -107,8 +107,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvBody.setText(tweet.body);
             tvScreenName.setText("@" + tweet.user.sreenName);
             tvName.setText( tweet.user.name);
-            tvReply.setText(tweet.Retweets);
-            tvHeart.setText(tweet.Favorites);
+            tvRetweet.setText(tweet.getRetweets());
+            tvHeart.setText(tweet.getFavorites());
 
             container.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -123,27 +123,54 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvHeart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    int favories = Integer.parseInt(tweet.Favorites);
                     if(!tweet.favorited){
                         Drawable drawable = ContextCompat.getDrawable(context, R.drawable.fill_heart);
                         drawable.setBounds(0,0, drawable.getMinimumHeight(), drawable.getMinimumWidth());
                         tvHeart.setCompoundDrawables(drawable, null, null, null);
 
 
-                        tvHeart.setText(String.valueOf(++favories));
+                        tvHeart.setText(String.valueOf(++tweet.Favorites));
                         tweet.favorited = true;
                     }
                     else
                     {
-                        ++favories;
+                        ++tweet.Favorites;
 
                         Drawable drawable = ContextCompat.getDrawable(context, R.drawable.heart);
                         drawable.setBounds(0,0, drawable.getMinimumHeight(), drawable.getMinimumWidth());
                         tvHeart.setCompoundDrawables(drawable, null, null, null);
 
-                        --favories;
-                        tvHeart.setText(String.valueOf(favories));
+                        --tweet.Favorites;
+                        tvHeart.setText(String.valueOf(tweet.Favorites));
                         tweet.favorited = false;
+                    }
+                }
+            });
+
+
+            tvRetweet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(!tweet.retweeted){
+                        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.green_retweet);
+                        drawable.setBounds(0,0, drawable.getMinimumHeight(), drawable.getMinimumWidth());
+                        tvRetweet.setCompoundDrawables(drawable, null, null, null);
+
+
+                        tvRetweet.setText(String.valueOf(++tweet.Retweets));
+                        tweet.retweeted = true;
+                    }
+                    else
+                    {
+                        ++tweet.Retweets;
+
+                        Drawable drawable = ContextCompat.getDrawable(context, R.drawable.retweet);
+                        drawable.setBounds(0,0, drawable.getMinimumHeight(), drawable.getMinimumWidth());
+                        tvRetweet.setCompoundDrawables(drawable, null, null, null);
+
+                        --tweet.Retweets;
+                        tvRetweet.setText(String.valueOf(tweet.Retweets));
+                        tweet.retweeted = false;
                     }
                 }
             });
