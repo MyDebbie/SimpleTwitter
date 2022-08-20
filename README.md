@@ -33,7 +33,9 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='Twitter_Video' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='Twitter_Video.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
+GIF created with XRecorder.
 
 
 
