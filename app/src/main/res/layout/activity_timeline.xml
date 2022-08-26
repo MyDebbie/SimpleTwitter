@@ -44,5 +44,16 @@
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fltbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
+        android:src="@drawable/add_tweet"
+        android:backgroundTint="@color/logo_background"
+        app:layout_anchor="@id/rvTweets"
+        app:layout_anchorGravity="bottom|right|end" />
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

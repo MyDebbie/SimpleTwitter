@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -85,6 +87,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         TextView tvHeart;
         TextView tvRetweet;
         ImageView ivImage;
+        TextView tvReply;
 
 
 
@@ -99,6 +102,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvHeart = itemView.findViewById(R.id.tvHeart);
             tvRetweet = itemView.findViewById(R.id.tvRetweet);
             ivImage = itemView.findViewById(R.id.ivImage);
+            tvReply = itemView.findViewById(R.id.tvReply);
 
 
         }
@@ -172,6 +176,15 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                         tvRetweet.setText(String.valueOf(tweet.Retweets));
                         tweet.retweeted = false;
                     }
+                }
+            });
+
+            tvReply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FragmentManager fm = ((FragmentActivity) context).getSupportFragmentManager();
+                    ReplyFragment replyFragment = ReplyFragment.newInstance("Some Title");
+                    replyFragment.show(fm, "Compose_Fragament");
                 }
             });
 

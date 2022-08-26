@@ -3,30 +3,29 @@ package com.codepath.apps.restclienttemplate.models;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.RelativeLayout;
 
-import com.codepath.apps.restclienttemplate.EndlessRecyclerViewScrollListener;
+import com.codepath.apps.restclienttemplate.ComposeFragment;
 import com.codepath.apps.restclienttemplate.EndlessRecyclerViewScrollListener;
 import com.codepath.apps.restclienttemplate.R;
-import com.codepath.apps.restclienttemplate.TweetDetailActivity;
 import com.codepath.apps.restclienttemplate.TweetsAdapter;
 import com.codepath.apps.restclienttemplate.TwitterApp;
 import com.codepath.apps.restclienttemplate.TwitterClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,15 +34,20 @@ import okhttp3.Headers;
 
 public class TimelineActivity extends AppCompatActivity {
 
+    private static final String TAG = "TimelineActivity";
+
+    public final int REQUEST_CODE = 20;
+    TweetDao tweetDao;
+
     TwitterClient client;
     RecyclerView rvTweets;
     TweetsAdapter adapter;
     List<Tweet> tweets;
     EndlessRecyclerViewScrollListener scrollListener;
     SwipeRefreshLayout swipeContainer;
+    FloatingActionButton fltbutton;
 
 
-    private static final String TAG = "TimelineActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +56,23 @@ public class TimelineActivity extends AppCompatActivity {
 
          client = TwitterApp.getRestClient(this);
 
+
+        tweetDao = ((TwitterApp) getApplicationContext()).getMyDatabase().tweetDao();
+
+
+        fltbutton = findViewById(R.id.fltbutton);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setIcon(R.drawable.twitter);
         getSupportActionBar().setTitle("");
+
+        fltbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showEditDialog();
+            }
+        });
+
 
 
 
@@ -93,7 +110,27 @@ public class TimelineActivity extends AppCompatActivity {
         };
         // Adds the scroll listener to RecyclerView
         rvTweets.addOnScrollListener(scrollListener);
+
+        // Query for existing tweets in the DB
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                Log.i(TAG, "Showing data from database");
+                List<TweetWithUser> tweetWithUsers = tweetDao.recentItems();
+                List<Tweet> tweetsFromDB = TweetWithUser.getTweetList(tweetWithUsers);
+
+                adapter.clear();
+                adapter.addAll(tweetsFromDB);
+            }
+        });
         populateHomeTimeline();
+    }
+
+    private void showEditDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        ComposeFragment composeFragment = ComposeFragment.newInstance("Some Title");
+        composeFragment.show(fm, "Compose_Fragament");
     }
 
     @Override
@@ -112,14 +149,16 @@ public class TimelineActivity extends AppCompatActivity {
                 Log.i(TAG, "onSuccess for loadMoreData!" + json.toString());
                 // 2. Deserialize and construct new model objects from the API response
                 JSONArray jsonArray = json.jsonArray;
+                List<Tweet> tweets = null;
                 try {
-                    List<Tweet> tweets = Tweet.fromJsonArray(jsonArray);
+                     tweets = Tweet.fromJsonArray(jsonArray);
                     // 3. Append the new data objects to the existing set of items inside the array of items
                     // 4. Notify the adapter of the new items made with `notifyItemRangeInserted()`
-                    adapter.addAll(tweets);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                adapter.addAll(tweets);
             }
 
             @Override
@@ -137,10 +176,25 @@ public class TimelineActivity extends AppCompatActivity {
                Log.i(TAG, "onSuccess!" + json.toString());
                JSONArray jsonArray = json.jsonArray;
                try {
+                   List<Tweet> tweetsFromNetwork = Tweet.fromJsonArray(jsonArray);
                    adapter.clear();
-                   adapter.addAll(Tweet.fromJsonArray(jsonArray));
+                   adapter.addAll(tweetsFromNetwork);
                    // Now we call setRefreshing(false) to signal refresh has finished
                    swipeContainer.setRefreshing(false);
+                   adapter.notifyDataSetChanged();
+
+                   AsyncTask.execute(new Runnable() {
+                       @Override
+                       public void run() {
+                           Log.i(TAG, "Saving data into database");
+                           // insert users first
+                           List<User> usersFromNetwork = User.fromJsonTweetArray(tweetsFromNetwork);
+                           tweetDao.insertModel(usersFromNetwork.toArray(new User[0]));
+
+                           // insert tweets next
+                           tweetDao.insertModel(tweetsFromNetwork.toArray(new Tweet[0]));
+                       }
+                   });
                } catch (JSONException e) {
                    Log.e(TAG, "Json exception", e);
                }
