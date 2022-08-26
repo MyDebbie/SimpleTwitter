@@ -28,7 +28,7 @@ import okhttp3.Headers;
 
 public class ComposeFragment extends DialogFragment {
 
-    public static final String TAG = "ComposeActivity";
+    public static final String TAG = "ComposeFragment";
     public static final int MAX_TWEET_LENGTH = 140;
 
     EditText editCompose;
@@ -91,7 +91,6 @@ public class ComposeFragment extends DialogFragment {
                     Toast.makeText(context, "Sorry, your tweet is too long", Toast.LENGTH_LONG).show();
                     return;
                 }
-                Toast.makeText(context, tweetContent, Toast.LENGTH_LONG).show();
                 // Make an API call to Twitter to publish the tweet
                 client.publishTweet(tweetContent, new JsonHttpResponseHandler() {
                     @Override

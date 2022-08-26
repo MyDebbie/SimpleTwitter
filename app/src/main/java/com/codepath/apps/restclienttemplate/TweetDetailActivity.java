@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ public class TweetDetailActivity extends AppCompatActivity {
     TextView tvRetweet;
     ImageView ivImage;
     EditText edReply;
+    Button btnTweet;
 
 
     @Override
@@ -54,6 +56,7 @@ public class TweetDetailActivity extends AppCompatActivity {
         tvRetweet = findViewById(R.id.tvRetweet);
         ivImage = findViewById(R.id.ivImage);
         edReply = findViewById(R.id.edReply);
+        btnTweet = findViewById(R.id.btnTweet);
 
 
         Toolbar toolbar =  findViewById(R.id.toolbar);
