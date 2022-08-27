@@ -188,61 +188,43 @@
         android:background="?android:attr/listDivider" />
 
 
-        <EditText
-            android:id="@+id/edReply"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="640dp"
-            android:ems="10"
-            android:gravity="start|top"
-            android:hint="Reply" />
-
-
-    <LinearLayout
-        android:id="@+id/btnContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/edReply"
-        android:layout_marginStart="270dp"
-        android:layout_marginTop="0dp"
-        android:orientation="horizontal">
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/editText"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/edReply"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_toStartOf="@id/btnTweet"
+            android:layout_below="@id/divider3"
+            android:layout_marginTop="309dp"
+            android:layout_marginEnd="95dp"
             android:textColorHint="#ff1da1f2"
             app:boxStrokeColor="#ff1da1f2"
             app:counterEnabled="true"
             app:counterMaxLength="140"
             app:counterTextColor="@color/logo_background"
-            app:hintTextColor="#ff1da1f2" />
+            app:hintTextColor="#ff1da1f2">
 
-        <View
-            android:id="@+id/divider4"
-            android:layout_width="1dp"
-            android:layout_height="wrap_content"
-            android:layout_toStartOf="@id/btnTweet"
-            android:background="?android:attr/listDivider" />
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/edReply"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="300dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:text="@string/screenname" />
 
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/btnTweet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/edReply"
+            android:layout_below="@id/editText"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="5dp"
+            android:layout_marginTop="-50dp"
+            android:layout_marginEnd="10dp"
             android:text="@string/tweet"
             android:textColor="@android:color/white" />
-    </LinearLayout>
-
 
 
 </RelativeLayout>

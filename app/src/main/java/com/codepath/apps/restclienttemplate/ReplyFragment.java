@@ -20,7 +20,10 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.models.User;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import org.json.JSONException;
@@ -39,11 +42,18 @@ public class ReplyFragment extends DialogFragment {
     Button btnTweet;
     ImageButton cnbutton;
     ImageView ivprofile;
-    TextView tvScreenName;
-    TextView tvName;
+    TextView tvScreenName1;
+    TextView tvName1;
+    TextView txReply;
 
 
     public ReplyFragment(){}
+
+
+    public interface ReplyFragmentListener {
+        void onFinishReplyDialog(Tweet tweet);
+    }
+
 
     public static com.codepath.apps.restclienttemplate.ReplyFragment newInstance(String title) {
         com.codepath.apps.restclienttemplate.ReplyFragment frag = new com.codepath.apps.restclienttemplate.ReplyFragment();
@@ -68,12 +78,33 @@ public class ReplyFragment extends DialogFragment {
 
 
 
-        tvScreenName = view.findViewById(R.id.tvSreenName);
-        tvName = view.findViewById(R.id.tvName);
+        tvScreenName1 = view.findViewById(R.id.tvSreenName1);
+        tvName1 = view.findViewById(R.id.tvName1);
         ivprofile = view.findViewById(R.id.ivprofile);
         edReply = view.findViewById(R.id.edReply);
         btnTweet = view.findViewById(R.id.btnTweet);
         cnbutton = view.findViewById(R.id.cnbutton);
+        txReply = view.findViewById(R.id.txReply);
+
+
+        Bundle bundle = getArguments();
+        User currentuser = Parcels.unwrap(bundle.getParcelable("CurrentUser"));
+
+        Tweet tweet = Parcels.unwrap(bundle.getParcelable("tweet"));
+        txReply.setHint("Reply to " + tweet.user.name);
+        edReply.setText("@" + tweet.user.sreenName + "  ");
+
+
+
+        tvName1.setText(currentuser.name);
+        tvScreenName1.setText(currentuser.sreenName);
+        Glide.with(getContext()).load(currentuser.profileImageUrl).transform(new CircleCrop()).into(ivprofile);
+
+
+
+
+
+
 
 
         String title = getArguments().getString("title", "Compose tweet");

@@ -13,12 +13,17 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.models.User;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import org.json.JSONException;
@@ -36,8 +41,15 @@ public class ComposeFragment extends DialogFragment {
     ImageButton cnbutton;
     TwitterClient client;
     Context context;
+    ImageView ivprofile;
+    TextView tvScreenName1;
+    TextView tvName1;
 
     public ComposeFragment(){}
+
+    public interface ComposeFragmentListener {
+        void onFinishComposeDialog(Tweet tweet);
+    }
 
     public static ComposeFragment newInstance(String title) {
         ComposeFragment frag = new ComposeFragment();
@@ -60,6 +72,10 @@ public class ComposeFragment extends DialogFragment {
 
         client = TwitterApp.getRestClient(context);
         // Get field from view
+
+        tvScreenName1 = view.findViewById(R.id.tvSreenName1);
+        tvName1 = view.findViewById(R.id.tvName1);
+        ivprofile = view.findViewById(R.id.ivprofile);
         editCompose = (EditText) view.findViewById(R.id.editCompose);
         btonTweet = view.findViewById(R.id.btonTweet);
         cnbutton = view.findViewById(R.id.cnbutton);
@@ -70,12 +86,28 @@ public class ComposeFragment extends DialogFragment {
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
 
+        editCompose.setHint("What's happening?");
+
+
+        Bundle bundle = getArguments();
+        User currentuser = Parcels.unwrap(bundle.getParcelable("CurrentUser"));
+
+        tvName1.setText(currentuser.name);
+        tvScreenName1.setText(currentuser.sreenName);
+        Glide.with(getContext()).load(currentuser.profileImageUrl).transform(new CircleCrop()).into(ivprofile);
+
 
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
         String draft = pref.getString("TEXT", "");
         if(!draft.isEmpty()){
             editCompose.setText(draft);
+
+
+
+
         }
+
+
 
 
         // Set click listener on button
@@ -99,8 +131,8 @@ public class ComposeFragment extends DialogFragment {
                         try {
                             Tweet tweet = Tweet.fromJson(json.jsonObject);
                             Log.i(TAG, "Published tweet says: " + tweet.body);
-                            Intent intent = new Intent();
-                            intent.putExtra("tweet", Parcels.wrap(tweet));
+                            ComposeFragmentListener listener = (ComposeFragmentListener) getTargetFragment();
+                            listener.onFinishComposeDialog(tweet);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
