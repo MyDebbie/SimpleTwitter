@@ -34,7 +34,7 @@ import java.util.List;
 
 import okhttp3.Headers;
 
-public class TimelineActivity extends AppCompatActivity implements ComposeFragment.ComposeFragmentListener {
+public class TimelineActivity extends AppCompatActivity {
 
     private static final String TAG = "TimelineActivity";
     public static User current_user;
@@ -241,13 +241,4 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         });
     }
 
-    @Override
-    public void onFinishComposeDialog(Tweet tweet) {
-        // Update the RV with the tweet
-        // Modify data source of tweets
-        tweets.add(0, tweet);
-        // update the adapter
-        adapter.notifyItemInserted(0);
-        rvTweets.smoothScrollToPosition(0);
-    }
 }

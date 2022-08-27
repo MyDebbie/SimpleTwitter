@@ -3,11 +3,14 @@ package com.codepath.apps.restclienttemplate;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,9 +49,12 @@ public class TweetDetailActivity extends AppCompatActivity {
     TextView tvRetweets;
     TextView tvHeart;
     TextView tvRetweet;
+    TextView tvShare;
     ImageView ivImage;
     EditText edReply;
     Button btnTweet;
+    TextView tvReply;
+
 
 
     @SuppressLint("SetTextI18n")
@@ -71,6 +77,8 @@ public class TweetDetailActivity extends AppCompatActivity {
         ivImage = findViewById(R.id.ivImage);
         edReply = findViewById(R.id.edReply);
         btnTweet = findViewById(R.id.btnTweet);
+        tvShare = findViewById(R.id.tvShare);
+        tvReply = findViewById(R.id.tvReply);
 
 
         Toolbar toolbar =  findViewById(R.id.toolbar);
@@ -96,7 +104,7 @@ public class TweetDetailActivity extends AppCompatActivity {
         tvFavorites.setText(tweet.getFavorites() + " FAVORITES");
         tvRetweets.setText(tweet.getRetweets() + " RETWEETS");
         edReply.setHint("Reply to " + tweet.user.name);
-        edReply.setText("@" + tweet.user.sreenName);
+        edReply.setText("@" + tweet.user.sreenName +"  ");
 
         if(tweet.favorited) {
             Drawable drawable = ContextCompat.getDrawable(TweetDetailActivity.this, R.drawable.fill_heart);
@@ -208,6 +216,22 @@ public class TweetDetailActivity extends AppCompatActivity {
             }
         });
 
+        tvShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                sharingIntent.putExtra(Intent.EXTRA_TEXT, tweet.getUrl());
+                startActivity(Intent.createChooser(sharingIntent, "Share link"));
+            }
+        });
+
+        tvReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { showEditDialog(Parcels.wrap(tweet));}
+
+        });
+
 
         Glide.with(this).load(tweet.user.profileImageUrl).transform(new CircleCrop()).into(ivProfileImage);
 
@@ -216,6 +240,19 @@ public class TweetDetailActivity extends AppCompatActivity {
             Glide.with(this).load(tweet.entities.Image).transform(new RoundedCorners(60)).into(ivImage);
         }
     }
+
+    private void showEditDialog(Parcelable tweet) {
+
+        FragmentManager fm = getSupportFragmentManager();
+        ReplyFragment replyFragment = ReplyFragment.newInstance("Some Title");
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("CurrentUser", Parcels.wrap(TimelineActivity.current_user));
+        bundle.putParcelable("tweet", tweet);
+        replyFragment.setArguments(bundle);
+        replyFragment.show(fm, "Reply_Fragment");
+    }
+
     @Override
     public boolean onOptionsItemSelected( MenuItem item ) {
                 Intent intent = new Intent(TweetDetailActivity.this, TimelineActivity.class);

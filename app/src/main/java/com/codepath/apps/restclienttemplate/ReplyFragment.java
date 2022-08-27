@@ -1,5 +1,6 @@
 package com.codepath.apps.restclienttemplate;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -70,6 +71,7 @@ public class ReplyFragment extends DialogFragment {
 
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -91,7 +93,7 @@ public class ReplyFragment extends DialogFragment {
         User currentuser = Parcels.unwrap(bundle.getParcelable("CurrentUser"));
 
         Tweet tweet = Parcels.unwrap(bundle.getParcelable("tweet"));
-        txReply.setHint("Reply to " + tweet.user.name);
+        txReply.setHint("In reply to " + tweet.user.sreenName);
         edReply.setText("@" + tweet.user.sreenName + "  ");
 
 

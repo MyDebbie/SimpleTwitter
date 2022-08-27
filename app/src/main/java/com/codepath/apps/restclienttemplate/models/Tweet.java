@@ -108,4 +108,8 @@ public class Tweet {
         }
         return tweets;
     }
+
+    public String getUrl() {
+        return "https://twitter.com" + user.sreenName + "status/" + id;
+    }
 }

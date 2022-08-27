@@ -10,5 +10,7 @@
     <string name="reply">Reply</string>
     <string name="buttonDelete">Delete</string>
     <string name="buttonSave">Save</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
 
 </resources>

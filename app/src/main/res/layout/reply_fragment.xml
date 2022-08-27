@@ -71,7 +71,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tvSreenName1"
         android:layout_marginTop="35dp"
-        android:layout_marginEnd="95dp"
+        android:layout_marginEnd="5dp"
         android:textColorHint="#ff1da1f2"
         app:boxStrokeColor="#ff1da1f2"
         app:counterEnabled="true"
@@ -99,11 +99,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="315dp"
-        android:layout_marginTop="240dp"
-        android:layout_marginEnd="5dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="310dp"
+        android:layout_marginEnd="20dp"
         android:backgroundTint="#ff1da1f2"
-        android:elevation="15dp"
         android:text="@string/tweet"
         android:textColor="@android:color/white" />
 

@@ -1,7 +1,6 @@
 package com.codepath.apps.restclienttemplate;
-
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -18,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import com.bumptech.glide.Glide;
@@ -47,9 +47,6 @@ public class ComposeFragment extends DialogFragment {
 
     public ComposeFragment(){}
 
-    public interface ComposeFragmentListener {
-        void onFinishComposeDialog(Tweet tweet);
-    }
 
     public static ComposeFragment newInstance(String title) {
         ComposeFragment frag = new ComposeFragment();
@@ -81,7 +78,7 @@ public class ComposeFragment extends DialogFragment {
         cnbutton = view.findViewById(R.id.cnbutton);
         // Fetch arguments from bundle and set title
         String title = getArguments().getString("title", "Compose tweet");
-        editCompose.requestFocus();
+
         getDialog().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
@@ -101,9 +98,6 @@ public class ComposeFragment extends DialogFragment {
         String draft = pref.getString("TEXT", "");
         if(!draft.isEmpty()){
             editCompose.setText(draft);
-
-
-
 
         }
 
@@ -131,8 +125,6 @@ public class ComposeFragment extends DialogFragment {
                         try {
                             Tweet tweet = Tweet.fromJson(json.jsonObject);
                             Log.i(TAG, "Published tweet says: " + tweet.body);
-                            ComposeFragmentListener listener = (ComposeFragmentListener) getTargetFragment();
-                            listener.onFinishComposeDialog(tweet);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -150,18 +142,39 @@ public class ComposeFragment extends DialogFragment {
         cnbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String tweetContent = editCompose.getText().toString();
-                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
-                SharedPreferences.Editor edit = pref.edit();
-                edit.putString("TEXT", tweetContent);
-                edit.commit();
-                dismiss();
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+                alertDialogBuilder.setMessage("Do you want to delete or save?");
+                        alertDialogBuilder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface arg0, int arg1) {
+                                        Save_Tweet();
+                                    }
+                                });
 
+                alertDialogBuilder.setNegativeButton("Delete",new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        editCompose.getText().clear();
+                       dismiss();
+                    }
+                });
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
             }
-        });
+
+            });
 
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         getDialog().getWindow().setLayout(700,1400);
+    }
+    public void Save_Tweet() {
+        String tweetContent = editCompose.getText().toString();
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences.Editor edit = pref.edit();
+        edit.putString("TEXT", tweetContent);
+        edit.commit();
+        dismiss();
     }
 
 
