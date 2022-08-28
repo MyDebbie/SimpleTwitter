@@ -12,7 +12,7 @@ The following **required** functionality is completed:
   - [x] User can click a “Compose” icon in the Action Bar on the top right
   - [x] User can then enter a new tweet and post this to twitter
   - [x] User is taken back to home timeline with **new tweet visible** in timeline
-  - [] Newly created tweet should be manually inserted into the timeline and not rely on a full refresh
+  - [ ] Newly created tweet should be manually inserted into the timeline and not rely on a full refresh
   - [x] User can **see a counter with total number of characters left for tweet** on compose tweet page
 
 The following **optional** features are implemented:
@@ -35,7 +35,7 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='TwitterVideo.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [XRecorder]
 
